@@ -1,0 +1,48 @@
+#################################
+# Compiled sources              #
+#################################
+build/
+out/
+output/
+.release/
+
+#################################
+# Packer files                  #
+#################################
+**/crash.log
+**/*test.pkr.hcl
+**/packer_log*.txt
+.docs/*
+docs.zip
+packer-plugin-xelon
+
+#################################
+# Golang files                  #
+#################################
+/tools/bin/
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+#################################
+# IDE generated files           #
+#################################
+.idea/
+*.iml
+
+#################################
+# Logs and temp files           #
+#################################
+*.log
+*.swp
+*~
+
+#################################
+# OS generated files            #
+#################################
+Thumbs.db
+.directory
+.DS_Store
