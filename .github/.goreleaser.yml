@@ -1,0 +1,77 @@
+version: 2
+
+archives:
+  - formats: ["zip"]
+    files:
+      - none*
+    name_template: "{{ .ProjectName }}_v{{ .Version }}_x5.0_{{ .Os }}_{{ .Arch }}"
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: plugin-check
+    binary: "{{ .ProjectName }}_v{{ .Version }}_x5.0_{{ .Os }}_{{ .Arch }}"
+    flags:
+      - -trimpath
+    goarch:
+      - amd64
+    goos:
+      - linux
+    ldflags:
+      - "-s -w -X {{ .ModulePath }}/internal/version.Version={{.Version}} -X {{ .ModulePath }}/internal/version.VersionPrerelease="
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+  - binary: "{{ .ProjectName }}_v{{ .Version }}_x5.0_{{ .Os }}_{{ .Arch }}"
+    flags:
+      - -trimpath
+    goarch:
+      - amd64
+      - "386"
+      - arm
+      - arm64
+    goos:
+      - netbsd
+      - solaris
+      - openbsd
+      - freebsd
+      - windows
+      - linux
+      - darwin
+    ignore:
+      - goos: darwin
+        goarch: "386"
+      - goos: linux
+        goarch: amd64
+      - goos: openbsd
+        goarch: arm64
+      - goos: windows
+        goarm: 6
+    ldflags:
+      - "-s -w -X {{ .ModulePath }}/internal/version.Version={{.Version}} -X {{ .ModulePath }}/internal/version.VersionPrerelease="
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+checksum:
+  algorithm: sha256
+  name_template: "{{ .ProjectName }}_v{{ .Version }}_SHA256SUMS"
+
+dist: build
+
+env:
+  - CGO_ENABLED=0
+
+#signs:
+#  - artifacts: checksum
+#    args:
+#      # if you are using this is in a GitHub action or some other automated pipeline, you
+#      # need to pass the batch flag to indicate its not interactive.
+#      - "--batch"
+#      - "--local-user"
+#      - "{{ .Env.GPG_FINGERPRINT }}"
+#      - "--output"
+#      - "${signature}"
+#      - "--detach-sign"
+#      - "${artifact}"
+release:
+  draft: true
