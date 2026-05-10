@@ -20,7 +20,7 @@ builds:
     goos:
       - linux
     ldflags:
-      - "-s -w -X {{ .ModulePath }}/internal/version.Version={{.Version}} -X {{ .ModulePath }}/internal/version.VersionPrerelease="
+      - "-s -w -X {{ .ModulePath }}/internal/version.Version={{.Version}} -X {{ .ModulePath }}/internal/version.PrereleaseSuffix="
     mod_timestamp: "{{ .CommitTimestamp }}"
 
   - binary: "{{ .ProjectName }}_v{{ .Version }}_x5.0_{{ .Os }}_{{ .Arch }}"
@@ -49,7 +49,7 @@ builds:
       - goos: windows
         goarm: 6
     ldflags:
-      - "-s -w -X {{ .ModulePath }}/internal/version.Version={{.Version}} -X {{ .ModulePath }}/internal/version.VersionPrerelease="
+      - "-s -w -X {{ .ModulePath }}/internal/version.Version={{.Version}} -X {{ .ModulePath }}/internal/version.PrereleaseSuffix="
     mod_timestamp: "{{ .CommitTimestamp }}"
 
 checksum:
