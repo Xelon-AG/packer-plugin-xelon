@@ -1,4 +1,8 @@
 
+## v0.1.1 (2026-05-11)
+### Bug Fixes
+* set pre-release ldflag correctly
+
 ## v0.1.0 (2026-05-11)
 ### Bug Fixes
 * query correct ip address from device
