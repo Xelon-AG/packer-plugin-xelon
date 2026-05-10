@@ -3,7 +3,7 @@ module github.com/Xelon-AG/packer-plugin-xelon
 go 1.26
 
 require (
-	github.com/Xelon-AG/xelon-sdk-go v1.7.0
+	github.com/Xelon-AG/xelon-sdk-go v1.7.1
 	github.com/hashicorp/hcl/v2 v2.24.0
 	github.com/hashicorp/packer-plugin-sdk v0.6.7
 	github.com/zclconf/go-cty v1.18.1

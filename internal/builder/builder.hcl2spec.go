@@ -73,6 +73,7 @@ type FlatConfig struct {
 	SkipCreateTemplate        *bool             `mapstructure:"skip_create_template" required:"false" cty:"skip_create_template" hcl:"skip_create_template"`
 	DeviceName                *string           `mapstructure:"device_name" required:"false" cty:"device_name" hcl:"device_name"`
 	NetworkID                 *string           `mapstructure:"network_id" required:"true" cty:"network_id" hcl:"network_id"`
+	RootPassword              *string           `mapstructure:"root_password" required:"false" cty:"root_password" hcl:"root_password"`
 	SourceTemplateID          *string           `mapstructure:"source_template_id" required:"true" cty:"source_template_id" hcl:"source_template_id"`
 	TenantID                  *string           `mapstructure:"tenant_id" required:"true" cty:"tenant_id" hcl:"tenant_id"`
 	TemplateName              *string           `mapstructure:"template_name" required:"true" cty:"template_name" hcl:"template_name"`
@@ -154,6 +155,7 @@ func (*FlatConfig) HCL2Spec() map[string]hcldec.Spec {
 		"skip_create_template":         &hcldec.AttrSpec{Name: "skip_create_template", Type: cty.Bool, Required: false},
 		"device_name":                  &hcldec.AttrSpec{Name: "device_name", Type: cty.String, Required: false},
 		"network_id":                   &hcldec.AttrSpec{Name: "network_id", Type: cty.String, Required: false},
+		"root_password":                &hcldec.AttrSpec{Name: "root_password", Type: cty.String, Required: false},
 		"source_template_id":           &hcldec.AttrSpec{Name: "source_template_id", Type: cty.String, Required: false},
 		"tenant_id":                    &hcldec.AttrSpec{Name: "tenant_id", Type: cty.String, Required: false},
 		"template_name":                &hcldec.AttrSpec{Name: "template_name", Type: cty.String, Required: false},

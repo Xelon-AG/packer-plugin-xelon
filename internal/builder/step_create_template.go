@@ -46,6 +46,6 @@ func (s *stepCreateTemplate) Run(ctx context.Context, state multistep.StateBag) 
 	return multistep.ActionContinue
 }
 
-func (s *stepCreateTemplate) Cleanup(state multistep.StateBag) {
+func (s *stepCreateTemplate) Cleanup(_ multistep.StateBag) {
 	return
 }

@@ -29,14 +29,16 @@ func (s *stepCreateDevice) Run(ctx context.Context, state multistep.StateBag) mu
 
 	name := fmt.Sprintf("packer-%s", uuid.TimeOrderedUUID())
 	createRequest := &xelon.DeviceCreateRequest{
-		CPUCores:     2,
-		RAM:          2,
-		DiskSize:     10,
-		DisplayName:  name,
-		HostName:     name,
-		SwapDiskSize: 1,
-		TemplateID:   config.SourceTemplateID,
-		TenantID:     config.TenantID,
+		CPUCores:             2,
+		RAM:                  2,
+		DiskSize:             10,
+		DisplayName:          name,
+		HostName:             name,
+		Password:             config.RootPassword,
+		PasswordConfirmation: config.RootPassword,
+		SwapDiskSize:         1,
+		TemplateID:           config.SourceTemplateID,
+		TenantID:             config.TenantID,
 		Networks: []xelon.DeviceCreateNetwork{
 			{
 				ConnectOnPowerOn: true,
@@ -44,6 +46,9 @@ func (s *stepCreateDevice) Run(ctx context.Context, state multistep.StateBag) mu
 			},
 		},
 	}
+	sshKeyID := state.Get("ssh_key_id").(string)
+	createRequest.SSHKeyID = sshKeyID
+
 	log.Printf("[DEBUG] Creating Xelon device: %v", createRequest)
 	device, _, err := client.Devices.Create(ctx, createRequest)
 	if err != nil {
@@ -73,8 +78,16 @@ func (s *stepCreateDevice) Run(ctx context.Context, state multistep.StateBag) mu
 	}
 	for _, deviceNetwork := range deviceNetworks {
 		if deviceNetwork.Connected && deviceNetwork.ID == config.NetworkID {
-			deviceIPAddress = deviceNetwork.IPAddress
-			break
+			if len(deviceNetwork.IPAddresses) == 0 {
+				continue
+			}
+
+			for _, ipAddress := range deviceNetwork.IPAddresses {
+				if ipAddress.Is4() {
+					deviceIPAddress = ipAddress.String()
+					break
+				}
+			}
 		}
 	}
 

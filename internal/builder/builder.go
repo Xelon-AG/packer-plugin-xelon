@@ -43,6 +43,8 @@ type Config struct {
 	DeviceName string `mapstructure:"device_name" required:"false"`
 	// The ID of the network configured for the device.
 	NetworkID string `mapstructure:"network_id" required:"true"`
+	// Password for the device root or administrative user.
+	RootPassword string `mapstructure:"root_password" required:"false"`
 	// The ID of the Xelon template to launch device from.
 	SourceTemplateID string `mapstructure:"source_template_id" required:"true"`
 	// The ID of the Xelon tenant to whom the device and template belongs.
@@ -81,7 +83,7 @@ func (b *Builder) Prepare(raws ...any) (generatedVars []string, warnings []strin
 		return nil, nil, errs
 	}
 
-	packer.LogSecretFilter.Set(b.config.Token)
+	packer.LogSecretFilter.Set(b.config.Token, b.config.RootPassword)
 
 	return []string{}, nil, nil
 }
