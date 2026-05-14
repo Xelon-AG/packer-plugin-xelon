@@ -1,0 +1,17 @@
+<!-- Code generated from the comments of the DeviceConfig struct in internal/builder/config.go; DO NOT EDIT MANUALLY -->
+
+- `device_cpu_core_count` (int) - The number of CPU cores to allocate to the builder device. Defaults to `2`.
+
+- `device_memory_gb` (int) - The amount of RAM in GB to allocate to the builder device. Defaults to `4`.
+
+- `boot_disk_size_gb` (int) - The size of the builder device's boot disk in GB. The disk is created from the source
+  template and is what the OS runs on during the build. Defaults to `10`.
+
+- `swap_disk_size_gb` (int) - The size of the builder device's swap disk in GB. Defaults to `1`.
+
+- `device_name` (string) - The hostname and display name of the builder device. Defaults to `packer-{{ uuid }}`.
+
+- `admin_password` (string) - Password for root or administrative user, set at device creation. Must satisfy password
+  complexity requirements (6+ chars, mixed case and digit).
+
+<!-- End of code generated from the comments of the DeviceConfig struct in internal/builder/config.go; -->
