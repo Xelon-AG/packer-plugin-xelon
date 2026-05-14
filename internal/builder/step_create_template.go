@@ -30,10 +30,11 @@ func (s *stepCreateTemplate) Run(ctx context.Context, state multistep.StateBag) 
 	ui.Sayf("Creating template from device %s", deviceID)
 
 	template, _, err := client.Templates.Create(ctx, &xelon.TemplateCreateRequest{
-		DeviceID:  deviceID,
-		Name:      config.TemplateName,
-		SendEmail: false,
-		TenantID:  config.TenantID,
+		Description: config.TemplateDescription,
+		DeviceID:    deviceID,
+		Name:        config.TemplateName,
+		SendEmail:   false,
+		TenantID:    config.TenantID,
 	})
 	if err != nil {
 		state.Put("error", err)
