@@ -70,14 +70,18 @@ type FlatConfig struct {
 	BaseURL                   *string           `mapstructure:"base_url" required:"false" cty:"base_url" hcl:"base_url"`
 	ClientID                  *string           `mapstructure:"client_id" required:"true" cty:"client_id" hcl:"client_id"`
 	Token                     *string           `mapstructure:"token" required:"true" cty:"token" hcl:"token"`
-	SkipCreateTemplate        *bool             `mapstructure:"skip_create_template" required:"false" cty:"skip_create_template" hcl:"skip_create_template"`
+	DeviceCPUCores            *int              `mapstructure:"device_cpu_core_count" required:"false" cty:"device_cpu_core_count" hcl:"device_cpu_core_count"`
+	DeviceMemoryGB            *int              `mapstructure:"device_memory_gb" required:"false" cty:"device_memory_gb" hcl:"device_memory_gb"`
+	BootDiskSizeGB            *int              `mapstructure:"boot_disk_size_gb" required:"false" cty:"boot_disk_size_gb" hcl:"boot_disk_size_gb"`
+	SwapDiskSizeGB            *int              `mapstructure:"swap_disk_size_gb" required:"false" cty:"swap_disk_size_gb" hcl:"swap_disk_size_gb"`
 	DeviceName                *string           `mapstructure:"device_name" required:"false" cty:"device_name" hcl:"device_name"`
 	NetworkID                 *string           `mapstructure:"network_id" required:"true" cty:"network_id" hcl:"network_id"`
-	RootPassword              *string           `mapstructure:"root_password" required:"false" cty:"root_password" hcl:"root_password"`
+	AdminPassword             *string           `mapstructure:"admin_password" required:"false" cty:"admin_password" hcl:"admin_password"`
 	SourceTemplateID          *string           `mapstructure:"source_template_id" required:"true" cty:"source_template_id" hcl:"source_template_id"`
-	TenantID                  *string           `mapstructure:"tenant_id" required:"true" cty:"tenant_id" hcl:"tenant_id"`
-	TemplateName              *string           `mapstructure:"template_name" required:"true" cty:"template_name" hcl:"template_name"`
+	TemplateName              *string           `mapstructure:"template_name" required:"false" cty:"template_name" hcl:"template_name"`
 	TemplateDescription       *string           `mapstructure:"template_description" required:"false" cty:"template_description" hcl:"template_description"`
+	SkipCreateTemplate        *bool             `mapstructure:"skip_create_template" required:"false" cty:"skip_create_template" hcl:"skip_create_template"`
+	TenantID                  *string           `mapstructure:"tenant_id" required:"true" cty:"tenant_id" hcl:"tenant_id"`
 }
 
 // FlatMapstructure returns a new FlatConfig.
@@ -152,14 +156,18 @@ func (*FlatConfig) HCL2Spec() map[string]hcldec.Spec {
 		"base_url":                     &hcldec.AttrSpec{Name: "base_url", Type: cty.String, Required: false},
 		"client_id":                    &hcldec.AttrSpec{Name: "client_id", Type: cty.String, Required: false},
 		"token":                        &hcldec.AttrSpec{Name: "token", Type: cty.String, Required: false},
-		"skip_create_template":         &hcldec.AttrSpec{Name: "skip_create_template", Type: cty.Bool, Required: false},
+		"device_cpu_core_count":        &hcldec.AttrSpec{Name: "device_cpu_core_count", Type: cty.Number, Required: false},
+		"device_memory_gb":             &hcldec.AttrSpec{Name: "device_memory_gb", Type: cty.Number, Required: false},
+		"boot_disk_size_gb":            &hcldec.AttrSpec{Name: "boot_disk_size_gb", Type: cty.Number, Required: false},
+		"swap_disk_size_gb":            &hcldec.AttrSpec{Name: "swap_disk_size_gb", Type: cty.Number, Required: false},
 		"device_name":                  &hcldec.AttrSpec{Name: "device_name", Type: cty.String, Required: false},
 		"network_id":                   &hcldec.AttrSpec{Name: "network_id", Type: cty.String, Required: false},
-		"root_password":                &hcldec.AttrSpec{Name: "root_password", Type: cty.String, Required: false},
+		"admin_password":               &hcldec.AttrSpec{Name: "admin_password", Type: cty.String, Required: false},
 		"source_template_id":           &hcldec.AttrSpec{Name: "source_template_id", Type: cty.String, Required: false},
-		"tenant_id":                    &hcldec.AttrSpec{Name: "tenant_id", Type: cty.String, Required: false},
 		"template_name":                &hcldec.AttrSpec{Name: "template_name", Type: cty.String, Required: false},
 		"template_description":         &hcldec.AttrSpec{Name: "template_description", Type: cty.String, Required: false},
+		"skip_create_template":         &hcldec.AttrSpec{Name: "skip_create_template", Type: cty.Bool, Required: false},
+		"tenant_id":                    &hcldec.AttrSpec{Name: "tenant_id", Type: cty.String, Required: false},
 	}
 	return s
 }

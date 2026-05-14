@@ -29,14 +29,14 @@ func (s *stepCreateDevice) Run(ctx context.Context, state multistep.StateBag) mu
 
 	name := fmt.Sprintf("packer-%s", uuid.TimeOrderedUUID())
 	createRequest := &xelon.DeviceCreateRequest{
-		CPUCores:             2,
-		RAM:                  2,
-		DiskSize:             10,
+		CPUCores:             config.DeviceCPUCores,
+		RAM:                  config.DeviceMemoryGB,
+		DiskSize:             config.BootDiskSizeGB,
 		DisplayName:          name,
 		HostName:             name,
-		Password:             config.RootPassword,
-		PasswordConfirmation: config.RootPassword,
-		SwapDiskSize:         1,
+		Password:             config.AdminPassword,
+		PasswordConfirmation: config.AdminPassword,
+		SwapDiskSize:         config.SwapDiskSizeGB,
 		TemplateID:           config.SourceTemplateID,
 		TenantID:             config.TenantID,
 		Networks: []xelon.DeviceCreateNetwork{
