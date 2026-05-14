@@ -19,7 +19,7 @@ packer {
 Alternatively, you can use `packer plugins install` to manage installation of this plugin.
 
 ```sh
-$ packer plugins install github.com/organization/plugin-name
+$ packer plugins install github.com/Xelon-AG/packer-plugin-xelon
 ```
 
 ### Components
