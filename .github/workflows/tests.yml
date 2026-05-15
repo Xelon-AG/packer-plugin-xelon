@@ -1,47 +1,99 @@
-# This is a manually triggered action workflow.
-# It uses Packer at latest version to init, validate and build
-# an example configuration in a folder.
-# This action is compatible with Packer v1.7.0 or later.
-name: test plugin example
+name: Tests
 
 on:
-  workflow_dispatch:
-    inputs:
-      logs:
-        description: 'Set 1 to activate full logs'
-        required: false
-        default: '0'
-      folder:
-        description: 'Example folder'
-        required: false
-        default: './example'
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
 
 jobs:
   build:
+    name: build
     runs-on: ubuntu-latest
-    name: init and build example
+    timeout-minutes: 5
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Init
-        uses: hashicorp/packer-github-actions@master
+      - name: Set up Go
+        uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c #v6.4.0
         with:
-          working_directory: ${{ github.event.inputs.folder }}
-          command: init
+          go-version-file: "go.mod"
 
-      - name: Validate
-        uses: hashicorp/packer-github-actions@master
-        with:
-          working_directory: ${{ github.event.inputs.folder }}
-          command: validate
-        env:
-          PACKER_LOG: ${{ github.event.inputs.logs }}
+      - name: Build plugin
+        run: make build
 
-      - name: Build
-        uses: hashicorp/packer-github-actions@master
+  unit-tests:
+    name: unit tests
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set up Go
+        uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c #v6.4.0
         with:
-          working_directory: ${{ github.event.inputs.folder }}
-          command: build
-        env:
-          PACKER_LOG: ${{ github.event.inputs.logs }}
+          go-version-file: "go.mod"
+
+      - name: Fix permissions for cache directories
+        run: |
+          chmod -R 0755 ~/.cache/go-build ~/go/pkg/mod || true
+
+      - name: Set up cache
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae #v5.0.5
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('go.sum', 'tools/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Install tools
+        run: make tools
+
+      - name: Lint source code
+        run: make lint
+
+      - name: Run unit tests
+        run: make test
+
+  validation:
+    name: code and docs validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set up Go
+        uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c #v6.4.0
+        with:
+          go-version-file: "go.mod"
+
+      - name: Fix permissions for cache directories
+        run: |
+          chmod -R 0755 ~/.cache/go-build ~/go/pkg/mod || true
+
+      - name: Set up cache
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae #v5.0.5
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('go.sum', 'tools/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Install tools
+        run: make tools
+
+      - name: Validate code and docs consistency
+        run: |
+          make generate
+          git diff --compact-summary --exit-code || \
+            (echo; echo "Unexpected difference after code generation. Run 'make generate' and commit."; exit 1)

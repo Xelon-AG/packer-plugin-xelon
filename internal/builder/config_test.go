@@ -41,7 +41,7 @@ func TestTemplateConfig_Prepare(t *testing.T) {
 
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
-			errs := test.input.Prepare(interpolate.Context{}, nil)
+			errs := test.input.Prepare(&interpolate.Context{}, nil)
 
 			expectedName := test.expectedName
 			if test.interpolated {
