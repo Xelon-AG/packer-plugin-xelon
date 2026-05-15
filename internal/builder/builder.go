@@ -15,7 +15,7 @@ var (
 	_ packer.Builder = (*Builder)(nil)
 )
 
-// PluginBuilderID is the unique ID for the builder
+// PluginBuilderID is the unique ID for the builder.
 const PluginBuilderID = "packer.builder.xelon"
 
 type Builder struct {
@@ -37,10 +37,7 @@ func (b *Builder) Prepare(raws ...any) (generatedVars []string, warnings []strin
 }
 
 func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (packer.Artifact, error) {
-	client, err := newXelonClient(b.config)
-	if err != nil {
-		return nil, err
-	}
+	client := newXelonClient(b.config)
 
 	// set up the state bag
 	state := new(multistep.BasicStateBag)
