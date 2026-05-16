@@ -13,14 +13,14 @@ import (
 	"github.com/Xelon-AG/xelon-sdk-go/xelon"
 )
 
-func newXelonClient(c Config) (*xelon.Client, error) {
+func newXelonClient(c Config) *xelon.Client {
 	opts := []xelon.ClientOption{xelon.WithUserAgent(useragent.String(version.PluginVersion.FormattedVersion()))}
 	if c.BaseURL != "" {
 		opts = append(opts, xelon.WithBaseURL(c.BaseURL))
 	}
 	opts = append(opts, xelon.WithClientID(c.ClientID))
 
-	return xelon.NewClient(c.Token, opts...), nil
+	return xelon.NewClient(c.Token, opts...)
 }
 
 const (
@@ -153,10 +153,10 @@ func waitDeviceStateReady(ctx context.Context, client *xelon.Client, deviceID st
 	}
 }
 
-func exponentialBackoff(attempt int, base, max time.Duration) time.Duration {
+func exponentialBackoff(attempt int, base, maxDelay time.Duration) time.Duration {
 	delay := base * time.Duration(1<<(attempt-1))
-	if delay > max {
-		return max
+	if delay > maxDelay {
+		return maxDelay
 	}
 	jitter := time.Duration(rand.Int63n(int64(base)))
 	return delay + jitter
