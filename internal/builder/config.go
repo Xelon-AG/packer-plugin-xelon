@@ -3,7 +3,9 @@
 package builder
 
 import (
+	"errors"
 	"fmt"
+	"os"
 
 	"github.com/hashicorp/packer-plugin-sdk/common"
 	"github.com/hashicorp/packer-plugin-sdk/communicator"
@@ -11,6 +13,11 @@ import (
 	"github.com/hashicorp/packer-plugin-sdk/template/config"
 	"github.com/hashicorp/packer-plugin-sdk/template/interpolate"
 	"github.com/hashicorp/packer-plugin-sdk/uuid"
+)
+
+var (
+	ErrMissingClientID = errors.New(`client id is required: set "client_id" attribute or XELON_CLIENT_ID environment variable`)
+	ErrMissingToken    = errors.New(`token is required: set "token" attribute or XELON_TOKEN environment variable`)
 )
 
 type Config struct {
@@ -44,7 +51,29 @@ type AccessConfig struct {
 }
 
 func (c *AccessConfig) Prepare(_ *interpolate.Context, _ ...any) *packer.MultiError {
-	return nil
+	var errs *packer.MultiError
+
+	if c.BaseURL == "" {
+		if os.Getenv("XELON_BASE_URL") != "" {
+			c.BaseURL = os.Getenv("XELON_BASE_URL")
+		}
+	}
+
+	if c.ClientID == "" {
+		c.ClientID = os.Getenv("XELON_CLIENT_ID")
+	}
+	if c.ClientID == "" {
+		errs = packer.MultiErrorAppend(errs, ErrMissingClientID)
+	}
+
+	if c.Token == "" {
+		c.Token = os.Getenv("XELON_TOKEN")
+	}
+	if c.Token == "" {
+		errs = packer.MultiErrorAppend(errs, ErrMissingToken)
+	}
+
+	return errs
 }
 
 // DeviceConfig contains configuration for running a Xelon device from a source template.
@@ -106,7 +135,7 @@ type TemplateConfig struct {
 	TemplateDescription string `mapstructure:"template_description" required:"false"`
 }
 
-func (c *TemplateConfig) Prepare(ctx *interpolate.Context, raws ...any) *packer.MultiError {
+func (c *TemplateConfig) Prepare(ctx *interpolate.Context, _ ...any) *packer.MultiError {
 	var errs *packer.MultiError
 
 	if c.TemplateName == "" {
