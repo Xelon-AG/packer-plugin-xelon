@@ -57,7 +57,7 @@ generate:
 	@go generate ./...
 	@rm -rf .docs
 	@${TOOLS_BIN_DIR}/packer-sdc renderdocs -src docs -partials docs-partials/ -dst .docs/
-	@./.web-docs/scripts/compile-to-webdocs.sh "." ".docs" ".web-docs"
+	@./.web-docs/scripts/compile-to-webdocs.sh "." ".docs" ".web-docs" "Xelon-AG"
 	@rm -r ".docs"
 
 ## build: Build plugin for default local system's operating system and architecture.

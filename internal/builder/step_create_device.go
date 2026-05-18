@@ -8,6 +8,7 @@ import (
 
 	"github.com/hashicorp/packer-plugin-sdk/multistep"
 	"github.com/hashicorp/packer-plugin-sdk/packer"
+	"github.com/hashicorp/packer-plugin-sdk/packerbuilderdata"
 	"github.com/hashicorp/packer-plugin-sdk/uuid"
 
 	"github.com/Xelon-AG/xelon-sdk-go/xelon"
@@ -17,6 +18,8 @@ var _ multistep.Step = (*stepCreateDevice)(nil)
 
 // stepCreateDevice represents a build step that creates Xelon device.
 type stepCreateDevice struct {
+	GeneratedData *packerbuilderdata.GeneratedData
+
 	deviceID string
 }
 
@@ -93,6 +96,11 @@ func (s *stepCreateDevice) Run(ctx context.Context, state multistep.StateBag) mu
 
 	state.Put("device_id", device.ID)
 	state.Put("device_ip", deviceIPAddress)
+
+	// provision generated_data from declared in Builder.Prepare func
+	// see doc https://www.packer.io/docs/extending/custom-builders#build-variables for details
+	s.GeneratedData.Put("SourceTemplateID", config.SourceTemplateID)
+	s.GeneratedData.Put("TenantID", config.TenantID)
 
 	return multistep.ActionContinue
 }
