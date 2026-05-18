@@ -26,12 +26,12 @@ jobs:
       - name: Install tools
         run: make tools
 
-      #- name: Import GPG key
-      #  uses: crazy-max/ghaction-import-gpg@2dc316deee8e90f13e1a351ab510b4d5bc0c82cd # v7.0.0
-      #  id: import_gpg
-      #  with:
-      #    gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-      #    passphrase: ${{ secrets.PASSPHRASE }}
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@2dc316deee8e90f13e1a351ab510b4d5bc0c82cd # v7.0.0
+        id: import_gpg
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
 
       - name: Generate changelog
         run: |
@@ -43,5 +43,6 @@ jobs:
           args: release --config .github/goreleaser.yaml --clean --release-notes=.release/DRAFT.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          #GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
           # API_VERSION: ${{ steps.plugin_describe.outputs.api_version }}
