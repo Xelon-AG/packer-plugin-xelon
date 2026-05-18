@@ -1,5 +1,21 @@
 version: 2
 
+announce:
+  slack:
+    enabled: true
+    channel: "#vdc_docker"
+    icon_emoji: ':rocket:'
+    blocks:
+      - type: header
+        text:
+          type: plain_text
+          text: ":tada: New Release: Packer Plugin Xelon {{ .Tag }}"
+      - type: divider
+      - type: section
+        text:
+          type: mrkdwn
+          text: "New version shipped! :sparkles: Improved user experience with fresh features and stability fixes. Check the <{{ .ReleaseURL }}|release notes> for details."
+
 archives:
   - formats: ["zip"]
     files:
@@ -61,17 +77,16 @@ dist: build
 env:
   - CGO_ENABLED=0
 
-#signs:
-#  - artifacts: checksum
-#    args:
-#      # if you are using this is in a GitHub action or some other automated pipeline, you
-#      # need to pass the batch flag to indicate its not interactive.
-#      - "--batch"
-#      - "--local-user"
-#      - "{{ .Env.GPG_FINGERPRINT }}"
-#      - "--output"
-#      - "${signature}"
-#      - "--detach-sign"
-#      - "${artifact}"
+signs:
+  - artifacts: checksum
+    args:
+      - "--batch"
+      - "--local-user"
+      - "{{ .Env.GPG_FINGERPRINT }}"
+      - "--output"
+      - "${signature}"
+      - "--detach-sign"
+      - "${artifact}"
+
 release:
   draft: true
