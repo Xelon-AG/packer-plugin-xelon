@@ -1,4 +1,18 @@
 
+## v0.2.0 (2026-05-18)
+### Bug Fixes
+* set default template description
+* **deps**: upgrade crypto to v0.51.0
+### Code Refactoring
+* add validation for AccessConfig
+* split and extract config object from builder
+### Features
+* provide template-related properties via generated_data
+### Maintaining
+* fix golangci linter issues
+* **actions**: sign release binaries with gpg key
+* **actions**: refactor test github action for pull requests
+
 ## v0.1.1 (2026-05-11)
 ### Bug Fixes
 * set pre-release ldflag correctly
