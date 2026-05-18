@@ -4,9 +4,15 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+
   - package-ecosystem: "gomod"
     directory: "/"
     schedule:
       interval: "daily"
     allow:
-      - dependency-name: "github.com/hashicorp/packer-plugin-sdk"
+      - dependency-name: "github.com/hashicorp/*"
+
+  - package-ecosystem: "gomod"
+    directory: "/tools"
+    schedule:
+      interval: "daily"
