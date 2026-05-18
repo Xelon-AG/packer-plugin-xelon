@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/packer-plugin-sdk/multistep"
 	"github.com/hashicorp/packer-plugin-sdk/multistep/commonsteps"
 	"github.com/hashicorp/packer-plugin-sdk/packer"
+	"github.com/hashicorp/packer-plugin-sdk/packerbuilderdata"
 )
 
 var (
@@ -25,7 +26,7 @@ type Builder struct {
 
 func (b *Builder) ConfigSpec() hcldec.ObjectSpec { return b.config.FlatMapstructure().HCL2Spec() }
 
-func (b *Builder) Prepare(raws ...any) (generatedVars []string, warnings []string, err error) {
+func (b *Builder) Prepare(raws ...any) (generatedData []string, warnings []string, err error) {
 	errs := b.config.Prepare(raws...)
 	if errs != nil && len(errs.Errors) > 0 {
 		return nil, nil, errs
@@ -33,7 +34,13 @@ func (b *Builder) Prepare(raws ...any) (generatedVars []string, warnings []strin
 
 	packer.LogSecretFilter.Set(b.config.Token, b.config.AdminPassword)
 
-	return []string{}, nil, nil
+	generatedData = []string{
+		"SourceTemplateID",
+		"TenantID",
+		"TemplateID",
+		"TemplateName",
+	}
+	return generatedData, nil, nil
 }
 
 func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (packer.Artifact, error) {
@@ -45,6 +52,7 @@ func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (pack
 	state.Put("config", &b.config)
 	state.Put("hook", hook)
 	state.Put("ui", ui)
+	generatedData := &packerbuilderdata.GeneratedData{State: state}
 
 	// build steps
 	steps := []multistep.Step{
@@ -52,7 +60,9 @@ func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (pack
 			Debug:        b.config.PackerDebug,
 			DebugKeyPath: fmt.Sprintf("xelon_%s.pem", b.config.PackerBuildName),
 		},
-		&stepCreateDevice{},
+		&stepCreateDevice{
+			GeneratedData: generatedData,
+		},
 		&communicator.StepConnect{
 			Config:    &b.config.Comm,
 			Host:      communicator.CommHost(b.config.Comm.Host(), "device_ip"),
@@ -60,6 +70,7 @@ func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (pack
 		},
 		&commonsteps.StepProvision{},
 		&stepCreateTemplate{
+			GeneratedData:      generatedData,
 			SkipCreateTemplate: b.config.SkipCreateTemplate,
 		},
 	}
@@ -78,7 +89,7 @@ func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (pack
 		Client:       client,
 		TemplateID:   templateID,
 		TemplateName: templateName,
-		StateData:    map[string]any{"one": "two"},
+		StateData:    map[string]any{"generated_data": state.Get("generated_data")},
 	}
 
 	return artifact, nil
