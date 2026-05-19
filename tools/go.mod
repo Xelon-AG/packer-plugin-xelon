@@ -5,7 +5,7 @@ go 1.26
 require (
 	github.com/git-chglog/git-chglog v0.15.4
 	github.com/golangci/golangci-lint/v2 v2.12.1
-	github.com/hashicorp/packer-plugin-sdk v0.6.7
+	github.com/hashicorp/packer-plugin-sdk v0.6.8
 )
 
 require (
