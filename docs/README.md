@@ -19,21 +19,12 @@ packer {
 Alternatively, you can use `packer plugins install` to manage installation of this plugin.
 
 ```sh
-$ packer plugins install github.com/Xelon-AG/packer-plugin-xelon
+$ packer plugins install github.com/Xelon-AG/xelon
 ```
 
 ### Components
 
-The Scaffolding plugin is intended as a starting point for creating Packer plugins
-
 #### Builders
 
-- [builder](/packer/integrations/hashicorp/scaffolding/latest/components/builder/builder-name) - The scaffolding builder
-  is used to create endless Packer plugins using a consistent plugin structure.
-
-#### Data Sources
-
-- [data source](/packer/integrations/hashicorp/scaffolding/latest/components/datasource/datasource-name) - The
-  scaffolding data source is used to
-  export scaffolding data.
-
+- [xelon](/packer/integrations/Xelon-AG/xelon/latest/components/builder/xelon) - Create Xelon templates by launching
+  device from a source template and re-packaging it into a new template after provisioning.

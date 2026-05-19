@@ -10,7 +10,7 @@ updates:
     schedule:
       interval: "daily"
     allow:
-      - dependency-name: "github.com/hashicorp/*"
+      - dependency-name: "github.com/hashicorp/packer-plugin-sdk"
 
   - package-ecosystem: "gomod"
     directory: "/tools"
