@@ -26,5 +26,21 @@ $ packer plugins install github.com/Xelon-AG/xelon
 
 #### Builders
 
-- [xelon](/packer/integrations/Xelon-AG/xelon/latest/components/builder/xelon) - Create Xelon templates by launching
-  device from a source template and re-packaging it into a new template after provisioning.
+- [xelon](/packer/integrations/Xelon-AG/xelon/latest/components/builder/xelon) - The xelon builder creates new templates
+  from existing ones by launching a device based on a source template, provisioning that device, and exporting it as a
+  reusable template.
+
+### Authentication
+
+Authentication with Xelon HQ requires a Client ID and an Access Token. You can obtain both by creating a Service Token
+in your [user profile](https://api-v2-developers.xelon.ch/#section/Introduction/Authorization).
+
+The following options are available for the `xelon` builder and the `xelon-network` data source:
+
+#### Required
+
+@include 'internal/AccessConfig-required.mdx'
+
+#### Optional
+
+@include 'internal/AccessConfig-not-required.mdx'

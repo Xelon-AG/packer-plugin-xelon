@@ -19,6 +19,7 @@ var (
 // PluginBuilderID is the unique ID for the builder.
 const PluginBuilderID = "packer.builder.xelon"
 
+// Builder represents default "xelon-builder".
 type Builder struct {
 	config Config
 	runner multistep.Runner

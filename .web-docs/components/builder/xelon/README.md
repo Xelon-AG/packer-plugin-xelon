@@ -17,36 +17,17 @@ stores it in your account, it is up to you to use, delete, etc. the template.
 -> **Note:** Temporary resources are, by default, all created with the
 prefix `packer`.
 
+## Authentication
+
+This builder uses the same authentication method as the main Xelon plugin to connect to Xelon HQ. See
+the [authentication section](/packer/integrations/Xelon-AG/xelon#authentication) of the plugin’s documentation for
+details.
+
 ## Configuration Reference
 
 Configuration options are organized below into two categories: required and
 optional. Within each category, the available options are alphabetized and
 described.
-
-### Access Configuration
-
-**Required:**
-
-<!-- Code generated from the comments of the AccessConfig struct in internal/builder/config.go; DO NOT EDIT MANUALLY -->
-
-- `client_id` (string) - The client ID for IP ranges.
-  Alternatively, can be configured using the `XELON_CLIENT_ID` environment variable.
-
-- `token` (string) - The Xelon access token.
-  Alternatively, can be configured using the `XELON_TOKEN` environment variable.
-
-<!-- End of code generated from the comments of the AccessConfig struct in internal/builder/config.go; -->
-
-
-**Optional:**
-
-<!-- Code generated from the comments of the AccessConfig struct in internal/builder/config.go; DO NOT EDIT MANUALLY -->
-
-- `base_url` (string) - The base URL endpoint for Xelon HQ. Default is `https://hq.xelon.ch/api/v2/`.
-  Alternatively, can be configured using the `XELON_BASE_URL` environment variable.
-
-<!-- End of code generated from the comments of the AccessConfig struct in internal/builder/config.go; -->
-
 
 ### Device Configuration
 
