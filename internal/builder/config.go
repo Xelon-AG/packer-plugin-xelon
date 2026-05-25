@@ -3,30 +3,25 @@
 package builder
 
 import (
-	"errors"
 	"fmt"
-	"os"
 
 	"github.com/hashicorp/packer-plugin-sdk/common"
 	"github.com/hashicorp/packer-plugin-sdk/communicator"
 	"github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer-plugin-sdk/template/config"
+	packercfg "github.com/hashicorp/packer-plugin-sdk/template/config"
 	"github.com/hashicorp/packer-plugin-sdk/template/interpolate"
 	"github.com/hashicorp/packer-plugin-sdk/uuid"
-)
 
-var (
-	ErrMissingClientID = errors.New(`client id is required: set "client_id" attribute or XELON_CLIENT_ID environment variable`)
-	ErrMissingToken    = errors.New(`token is required: set "token" attribute or XELON_TOKEN environment variable`)
+	"github.com/Xelon-AG/packer-plugin-xelon/internal/config"
 )
 
 type Config struct {
 	common.PackerConfig `mapstructure:",squash"`
 	Comm                communicator.Config `mapstructure:",squash"`
 
-	AccessConfig   `mapstructure:",squash"`
-	DeviceConfig   `mapstructure:",squash"`
-	TemplateConfig `mapstructure:",squash"`
+	config.AccessConfig `mapstructure:",squash"`
+	DeviceConfig        `mapstructure:",squash"`
+	TemplateConfig      `mapstructure:",squash"`
 
 	// If true, Packer will not create the Xelon template. Useful for setting to `true`
 	// during a build test stage. Defaults to `false`.
@@ -35,45 +30,6 @@ type Config struct {
 	TenantID string `mapstructure:"tenant_id" required:"true"`
 
 	ctx interpolate.Context
-}
-
-// AccessConfig is for common configuration related to Xelon HQ API access.
-type AccessConfig struct {
-	// The base URL endpoint for Xelon HQ. Default is `https://hq.xelon.ch/api/v2/`.
-	// Alternatively, can be configured using the `XELON_BASE_URL` environment variable.
-	BaseURL string `mapstructure:"base_url" required:"false"`
-	// The client ID for IP ranges.
-	// Alternatively, can be configured using the `XELON_CLIENT_ID` environment variable.
-	ClientID string `mapstructure:"client_id" required:"true"`
-	// The Xelon access token.
-	// Alternatively, can be configured using the `XELON_TOKEN` environment variable.
-	Token string `mapstructure:"token" required:"true"`
-}
-
-func (c *AccessConfig) Prepare(_ *interpolate.Context, _ ...any) *packer.MultiError {
-	var errs *packer.MultiError
-
-	if c.BaseURL == "" {
-		if os.Getenv("XELON_BASE_URL") != "" {
-			c.BaseURL = os.Getenv("XELON_BASE_URL")
-		}
-	}
-
-	if c.ClientID == "" {
-		c.ClientID = os.Getenv("XELON_CLIENT_ID")
-	}
-	if c.ClientID == "" {
-		errs = packer.MultiErrorAppend(errs, ErrMissingClientID)
-	}
-
-	if c.Token == "" {
-		c.Token = os.Getenv("XELON_TOKEN")
-	}
-	if c.Token == "" {
-		errs = packer.MultiErrorAppend(errs, ErrMissingToken)
-	}
-
-	return errs
 }
 
 // DeviceConfig contains configuration for running a Xelon device from a source template.
@@ -156,7 +112,7 @@ func (c *TemplateConfig) Prepare(ctx *interpolate.Context, _ ...any) *packer.Mul
 
 func (c *Config) Prepare(raws ...any) *packer.MultiError {
 	var errs *packer.MultiError
-	err := config.Decode(c, &config.DecodeOpts{
+	err := packercfg.Decode(c, &packercfg.DecodeOpts{
 		PluginType:         PluginBuilderID,
 		Interpolate:        true,
 		InterpolateContext: &c.ctx,

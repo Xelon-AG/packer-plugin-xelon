@@ -1,0 +1,50 @@
+---
+description: |
+  The xelon Packer network data source filters and fetches a network and outputs relevant metadata.
+page_title: Xelon Network - Data Source
+nav_title: Xelon Network
+---
+
+# Xelon Network Data Source
+
+Type: `xelon-network`
+
+The Xelon Network data source provides information about a network in Xelon HQ.
+
+-> **Note:** Data sources is a feature exclusively available to HCL2 templates.
+
+Basic example of usage:
+
+```hcl
+data "xelon-network" "basic-example" {
+  name = "packer-builder-wan"
+}
+
+# usage example of the data source output
+locals {
+  network_id   = data.xelon-network.basic-example.id
+  network_type = data.xelon-network.basic-example.type
+}
+```
+
+## Configuration Reference
+
+Configuration options are organized below into two categories: required and optional. Within each category, the
+available options are alphabetized and described.
+
+**Required:**
+
+@include 'internal/datasource/NetworkConfig-required.mdx'
+
+**Optional:**
+
+@include 'internal/datasource/NetworkConfig-not-required.mdx'
+
+## Output Data
+
+@include 'internal/datasource/NetworkDatasourceOutput-not-required.mdx'
+
+## Authentication
+
+This data source uses the same authentication method as the main Xelon plugin to connect to Xelon HQ. See the of
+the [authentication section](/packer/integrations/Xelon-AG/xelon#authentication) plugin’s documentation for details.

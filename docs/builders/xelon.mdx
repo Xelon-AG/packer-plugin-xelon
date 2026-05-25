@@ -26,21 +26,36 @@ stores it in your account, it is up to you to use, delete, etc. the template.
 -> **Note:** Temporary resources are, by default, all created with the
 prefix `packer`.
 
+Basic example of usage:
+
+```hcl
+source "xelon" "basic-example" {
+  client_id = var.xelon_client_id
+  token     = var.xelon_token
+
+  source_template_id = "<source-template-id>"
+  network_id         = "<network-id>"
+  admin_password     = var.admin_password
+  ssh_username       = "ubuntu"
+
+  tenant_id     = "<tenant-id>"
+  template_name = "packer_Xelon_example_{{timestamp}}"
+}
+
+build {
+  sources = ["source.xelon.basic-example"]
+}
+```
+
+## Authentication
+
+This builder uses the same authentication method as the main Xelon plugin to connect to Xelon HQ. See
+the [authentication section](/packer/integrations/Xelon-AG/xelon#authentication) plugin’s documentation for details.
+
 ## Configuration Reference
 
-Configuration options are organized below into two categories: required and
-optional. Within each category, the available options are alphabetized and
-described.
-
-### Access Configuration
-
-**Required:**
-
-@include 'internal/builder/AccessConfig-required.mdx'
-
-**Optional:**
-
-@include 'internal/builder/AccessConfig-not-required.mdx'
+Configuration options are organized below into two categories: required and optional. Within each category, the
+available options are alphabetized and described.
 
 ### Device Configuration
 
@@ -62,26 +77,3 @@ described.
 
 @include 'internal/builder/Config-not-required.mdx'
 @include 'internal/builder/TemplateConfig-not-required.mdx'
-
-### Example Usage
-
-**HCL2**
-
-```hcl
-source "xelon" "basic" {
-  client_id = var.xelon_client_id
-  token     = var.xelon_token
-
-  source_template_id = "<source-template-id>"
-  network_id         = "<network-id>"
-  admin_password     = var.admin_password
-  ssh_username       = "ubuntu"
-
-  tenant_id     = "<tenant-id>"
-  template_name = "packer_Xelon_example_{{timestamp}}"
-}
-
-build {
-  sources = ["source.xelon.basic"]
-}
-```

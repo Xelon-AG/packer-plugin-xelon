@@ -10,6 +10,8 @@ import (
 	"github.com/hashicorp/packer-plugin-sdk/multistep/commonsteps"
 	"github.com/hashicorp/packer-plugin-sdk/packer"
 	"github.com/hashicorp/packer-plugin-sdk/packerbuilderdata"
+
+	"github.com/Xelon-AG/packer-plugin-xelon/internal/xelonapi"
 )
 
 var (
@@ -19,6 +21,7 @@ var (
 // PluginBuilderID is the unique ID for the builder.
 const PluginBuilderID = "packer.builder.xelon"
 
+// Builder represents default "xelon-builder".
 type Builder struct {
 	config Config
 	runner multistep.Runner
@@ -44,7 +47,7 @@ func (b *Builder) Prepare(raws ...any) (generatedData []string, warnings []strin
 }
 
 func (b *Builder) Run(ctx context.Context, ui packer.Ui, hook packer.Hook) (packer.Artifact, error) {
-	client := newXelonClient(b.config)
+	client := xelonapi.NewXelonClient(b.config.AccessConfig)
 
 	// set up the state bag
 	state := new(multistep.BasicStateBag)
