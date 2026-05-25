@@ -8,20 +8,20 @@ import (
 	"github.com/hashicorp/packer-plugin-sdk/common"
 	"github.com/hashicorp/packer-plugin-sdk/communicator"
 	"github.com/hashicorp/packer-plugin-sdk/packer"
-	"github.com/hashicorp/packer-plugin-sdk/template/config"
+	packercfg "github.com/hashicorp/packer-plugin-sdk/template/config"
 	"github.com/hashicorp/packer-plugin-sdk/template/interpolate"
 	"github.com/hashicorp/packer-plugin-sdk/uuid"
 
-	"github.com/Xelon-AG/packer-plugin-xelon/internal"
+	"github.com/Xelon-AG/packer-plugin-xelon/internal/config"
 )
 
 type Config struct {
 	common.PackerConfig `mapstructure:",squash"`
 	Comm                communicator.Config `mapstructure:",squash"`
 
-	internal.AccessConfig `mapstructure:",squash"`
-	DeviceConfig          `mapstructure:",squash"`
-	TemplateConfig        `mapstructure:",squash"`
+	config.AccessConfig `mapstructure:",squash"`
+	DeviceConfig        `mapstructure:",squash"`
+	TemplateConfig      `mapstructure:",squash"`
 
 	// If true, Packer will not create the Xelon template. Useful for setting to `true`
 	// during a build test stage. Defaults to `false`.
@@ -112,7 +112,7 @@ func (c *TemplateConfig) Prepare(ctx *interpolate.Context, _ ...any) *packer.Mul
 
 func (c *Config) Prepare(raws ...any) *packer.MultiError {
 	var errs *packer.MultiError
-	err := config.Decode(c, &config.DecodeOpts{
+	err := packercfg.Decode(c, &packercfg.DecodeOpts{
 		PluginType:         PluginBuilderID,
 		Interpolate:        true,
 		InterpolateContext: &c.ctx,

@@ -30,6 +30,12 @@ $ packer plugins install github.com/Xelon-AG/xelon
   from existing ones by launching a device based on a source template, provisioning that device, and exporting it as a
   reusable template.
 
+#### Data sources
+
+- [xelon-network](/packer/integrations/Xelon-AG/xelon/latest/components/data-source/network) - The xelon-network data
+  source retrieves information about a network in Xelon HQ, including its ID and type. Use it to dynamically reference
+  network details in your Packer templates.
+
 ### Authentication
 
 Authentication with Xelon HQ requires a Client ID and an Access Token. You can obtain both by creating a Service Token
@@ -39,8 +45,8 @@ The following options are available for the `xelon` builder and the `xelon-netwo
 
 #### Required
 
-@include 'internal/AccessConfig-required.mdx'
+@include 'internal/config/AccessConfig-required.mdx'
 
 #### Optional
 
-@include 'internal/AccessConfig-not-required.mdx'
+@include 'internal/config/AccessConfig-not-required.mdx'

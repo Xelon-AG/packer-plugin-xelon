@@ -1,5 +1,5 @@
 //go:generate packer-sdc struct-markdown
-package internal
+package config
 
 import (
 	"errors"

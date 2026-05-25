@@ -1,4 +1,4 @@
-package builder
+package xelonapi
 
 import (
 	"context"
@@ -7,21 +7,8 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/hashicorp/packer-plugin-sdk/useragent"
-
-	"github.com/Xelon-AG/packer-plugin-xelon/internal/version"
 	"github.com/Xelon-AG/xelon-sdk-go/xelon"
 )
-
-func newXelonClient(c Config) *xelon.Client {
-	opts := []xelon.ClientOption{xelon.WithUserAgent(useragent.String(version.PluginVersion.FormattedVersion()))}
-	if c.BaseURL != "" {
-		opts = append(opts, xelon.WithBaseURL(c.BaseURL))
-	}
-	opts = append(opts, xelon.WithClientID(c.ClientID))
-
-	return xelon.NewClient(c.Token, opts...)
-}
 
 const (
 	maxRetries   = 10
@@ -30,7 +17,7 @@ const (
 	pollInterval = 15 * time.Second
 )
 
-func waitDevicePowerStateOn(ctx context.Context, client *xelon.Client, deviceID string) error {
+func WaitDevicePowerStateOn(ctx context.Context, client *xelon.Client, deviceID string) error {
 	attempt := 0
 
 	ctx, cancel := context.WithTimeout(ctx, 30*time.Minute)
@@ -71,7 +58,7 @@ func waitDevicePowerStateOn(ctx context.Context, client *xelon.Client, deviceID 
 	}
 }
 
-func waitDevicePowerStateOff(ctx context.Context, client *xelon.Client, deviceID string) error {
+func WaitDevicePowerStateOff(ctx context.Context, client *xelon.Client, deviceID string) error {
 	attempt := 0
 
 	ctx, cancel := context.WithTimeout(ctx, 30*time.Minute)
@@ -112,7 +99,7 @@ func waitDevicePowerStateOff(ctx context.Context, client *xelon.Client, deviceID
 	}
 }
 
-func waitDeviceStateReady(ctx context.Context, client *xelon.Client, deviceID string) error {
+func WaitDeviceStateReady(ctx context.Context, client *xelon.Client, deviceID string) error {
 	attempt := 0
 
 	ctx, cancel := context.WithTimeout(ctx, 30*time.Minute)

@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/packer-plugin-sdk/packerbuilderdata"
 	"github.com/hashicorp/packer-plugin-sdk/uuid"
 
+	"github.com/Xelon-AG/packer-plugin-xelon/internal/xelonapi"
 	"github.com/Xelon-AG/xelon-sdk-go/xelon"
 )
 
@@ -62,12 +63,12 @@ func (s *stepCreateDevice) Run(ctx context.Context, state multistep.StateBag) mu
 	s.deviceID = device.ID
 
 	ui.Sayf("Waiting for device (%s) to become ready...", device.ID)
-	err = waitDevicePowerStateOn(ctx, client, device.ID)
+	err = xelonapi.WaitDevicePowerStateOn(ctx, client, device.ID)
 	if err != nil {
 		state.Put("error", err)
 		return multistep.ActionHalt
 	}
-	err = waitDeviceStateReady(ctx, client, device.ID)
+	err = xelonapi.WaitDeviceStateReady(ctx, client, device.ID)
 	if err != nil {
 		state.Put("error", err)
 		return multistep.ActionHalt
@@ -131,7 +132,7 @@ func (s *stepCreateDevice) Cleanup(state multistep.StateBag) {
 			return
 		}
 
-		err = waitDevicePowerStateOff(ctx, client, s.deviceID)
+		err = xelonapi.WaitDevicePowerStateOff(ctx, client, s.deviceID)
 		if err != nil {
 			ui.Errorf("Error waiting for Xelon device (%s) to be powered off: %v", s.deviceID, err)
 			return
