@@ -35,13 +35,16 @@ $ packer plugins install github.com/Xelon-AG/xelon
 - [xelon-network](/packer/integrations/Xelon-AG/xelon/latest/components/data-source/network) - The xelon-network data
   source retrieves information about a network in Xelon HQ, including its ID and type. Use it to dynamically reference
   network details in your Packer templates.
+- [xelon-template](/packer/integrations/Xelon-AG/xelon/latest/components/data-source/template) - The xelon-template data
+  source retrieves information about a template in Xelon HQ, including its ID, name and creation date. Use it to
+  dynamically reference template details in your Packer templates.
 
 ### Authentication
 
 Authentication with Xelon HQ requires a Client ID and an Access Token. You can obtain both by creating a Service Token
 in your [user profile](https://api-v2-developers.xelon.ch/#section/Introduction/Authorization).
 
-The following options are available for the `xelon` builder and the `xelon-network` data source:
+The following options are available for the `xelon` builder and the `xelon-network` and `xelon-template` data source:
 
 #### Required
 

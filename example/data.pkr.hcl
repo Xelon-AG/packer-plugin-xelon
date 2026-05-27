@@ -1,6 +1,8 @@
-# Copyright IBM Corp. 2020, 2025
-# SPDX-License-Identifier: MPL-2.0
+data "xelon-template" "ubuntu" {
+  name        = "Ubuntu 20.04 64 Bit EN"
+  most_recent = true
+}
 
-data "scaffolding-my-datasource" "mock-data" {
-  mock = "mock-config"
+locals {
+  template_id = data.xelon-template.basic-example.id
 }
