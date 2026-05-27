@@ -1,0 +1,50 @@
+---
+description: |
+  The xelon Packer template data source filters and fetches a template and outputs relevant metadata.
+page_title: Xelon Template - Data Source
+nav_title: Xelon Template
+---
+
+# Xelon Template Data Source
+
+Type: `xelon-template`
+
+The Xelon template data source provides information about a template in Xelon HQ.
+
+-> **Note:** Data sources is a feature exclusively available to HCL2 templates.
+
+Basic example of usage:
+
+```hcl
+data "xelon-template" "basic-example" {
+  name        = "ubuntu-24-base"
+  most_recent = true
+}
+
+# usage example of the data source output
+locals {
+  template_id = data.xelon-template.basic-example.id
+}
+```
+
+## Configuration Reference
+
+Configuration options are organized below into two categories: required and optional. Within each category, the
+available options are alphabetized and described.
+
+**Required:**
+
+@include 'internal/datasource/TemplateConfig-required.mdx'
+
+**Optional:**
+
+@include 'internal/datasource/TemplateConfig-not-required.mdx'
+
+## Output Data
+
+@include 'internal/datasource/TemplateDatasourceOutput-not-required.mdx'
+
+## Authentication
+
+This data source uses the same authentication method as the main Xelon plugin to connect to Xelon HQ. See the of
+the [authentication section](/packer/integrations/Xelon-AG/xelon#authentication) plugin’s documentation for details.

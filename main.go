@@ -15,6 +15,7 @@ func main() {
 	pps := plugin.NewSet()
 	pps.RegisterBuilder(plugin.DEFAULT_NAME, new(builder.Builder))
 	pps.RegisterDatasource("network", new(datasource.NetworkDatasource))
+	pps.RegisterDatasource("template", new(datasource.TemplateDatasource))
 	pps.SetVersion(version.PluginVersion)
 	err := pps.Run()
 	if err != nil {

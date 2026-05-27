@@ -6,7 +6,17 @@ integration {
   identifier  = "packer/Xelon-AG/xelon"
   component {
     type = "builder"
-    name = "Xelon Cloud"
+    name = "Xelon"
     slug = "xelon"
+  }
+  component {
+    type = "data-source"
+    name = "Xelon Network"
+    slug = "network"
+  }
+  component {
+    type = "data-source"
+    name = "Xelon Template"
+    slug = "template"
   }
 }

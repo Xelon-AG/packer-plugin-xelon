@@ -1,40 +1,24 @@
 packer {
   required_plugins {
-    scaffolding = {
-      version = ">=v0.1.0"
-      source  = "github.com/hashicorp/scaffolding"
+    xelon = {
+      source  = "github.com/Xelon-AG/xelon"
+      version = ">= 1"
     }
   }
 }
 
-source "scaffolding-my-builder" "foo-example" {
-  mock = local.foo
-}
+source "xelon" "example" {
+  client_id = "YOUR CLIENT ID"
+  token     = "YOUR API TOKEN"
 
-source "scaffolding-my-builder" "bar-example" {
-  mock = local.bar
+  tenant_id          = "YOUR TENANT ID"
+  source_template_id = "SOURCE TEMPLATE ID"
+  network_id         = "NETWORK ID"
+  admin_password     = "<secure-password-for-admin-user>"
+
+  ssh_username = "root"
 }
 
 build {
-  sources = [
-    "source.scaffolding-my-builder.foo-example",
-  ]
-
-  source "source.scaffolding-my-builder.bar-example" {
-    name = "bar"
-  }
-
-  provisioner "scaffolding-my-provisioner" {
-    only = ["scaffolding-my-builder.foo-example"]
-    mock = "foo: ${local.foo}"
-  }
-
-  provisioner "scaffolding-my-provisioner" {
-    only = ["scaffolding-my-builder.bar"]
-    mock = "bar: ${local.bar}"
-  }
-
-  post-processor "scaffolding-my-post-processor" {
-    mock = "post-processor mock-config"
-  }
+  sources = ["source.xelon.example"]
 }
