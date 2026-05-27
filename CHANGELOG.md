@@ -1,4 +1,23 @@
 
+## v0.3.0 (2026-05-27)
+### Code Refactoring
+* extract AccessConfig from builder
+### Documentation
+* prepare web-docs for integrations listing
+### Features
+* add datasource to fetch template data
+* add datasource to fetch network data
+### Maintaining
+* fix test for access config logic
+* **dependabot**: reduce noise with all hashicorp deps
+* **dependabot**: add tools for auto-checking package updates from dependabot
+* **deps**: bump github.com/hashicorp/packer-plugin-sdk in /tools
+* **deps**: bump github.com/hashicorp/packer-plugin-sdk
+* **deps**: bump goreleaser/goreleaser-action from 7.2.1 to 7.2.2
+* **deps**: bump github.com/golangci/golangci-lint/v2 in /tools
+* **deps**: bump github.com/hashicorp/packer-plugin-sdk in /tools
+* **deps**: bump github.com/hashicorp/packer-plugin-sdk
+
 ## v0.2.0 (2026-05-18)
 ### Bug Fixes
 * set default template description
