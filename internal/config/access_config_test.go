@@ -1,6 +1,7 @@
 package config
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/packer-plugin-sdk/template/interpolate"
@@ -10,7 +11,7 @@ import (
 func TestAccessConfig_Prepare(t *testing.T) {
 	type testCase struct {
 		input          *AccessConfig
-		expectedConfig AccessConfig
+		expectedConfig *AccessConfig
 		expectedErrors int
 	}
 	tests := map[string]testCase{
@@ -19,7 +20,7 @@ func TestAccessConfig_Prepare(t *testing.T) {
 				ClientID: "client-id-value",
 				Token:    "token-value",
 			},
-			expectedConfig: AccessConfig{
+			expectedConfig: &AccessConfig{
 				ClientID: "client-id-value",
 				Token:    "token-value",
 			},
@@ -28,27 +29,30 @@ func TestAccessConfig_Prepare(t *testing.T) {
 			input: &AccessConfig{
 				Token: "token-value",
 			},
-			expectedConfig: AccessConfig{},
+			expectedConfig: &AccessConfig{},
 			expectedErrors: 1,
 		},
 		"missing token": {
 			input: &AccessConfig{
 				ClientID: "client-id-value",
 			},
-			expectedConfig: AccessConfig{},
+			expectedConfig: &AccessConfig{},
 			expectedErrors: 1,
 		},
 		"missing client_id and token": {
 			input:          &AccessConfig{},
-			expectedConfig: AccessConfig{},
+			expectedConfig: &AccessConfig{},
 			expectedErrors: 2,
 		},
 	}
 
+	_ = os.Unsetenv("XELON_BASE_URL")
+	_ = os.Unsetenv("XELON_CLIENT_ID")
+	_ = os.Unsetenv("XELON_TOKEN")
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
 			errs := test.input.Prepare(&interpolate.Context{}, nil)
-			actualConfig := test.expectedConfig
+			actualConfig := test.input
 
 			if test.expectedErrors > 0 {
 				assert.Len(t, errs.Errors, test.expectedErrors)
